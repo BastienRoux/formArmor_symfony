@@ -74,4 +74,9 @@ class Plan_formation
 
         return $this;
     }
+
+    public function isEffectue(): ?bool
+    {
+        return $this->effectue;
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\InscriptionRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,22 +18,28 @@ class Inscription
      */
     private $id;
 
-	/**
-	 * @ORM\ManyToOne (targetEntity="App\Entity\Client")
-	 * @ORM\JoinColumn(nullable=false)
-	 */
-	private $client;
-	
-	/**
-	 * @ORM\ManyToOne (targetEntity="App\Entity\Session_formation")
-	 * @ORM\JoinColumn(nullable=false)
-	 */
-	private $session_formation;
-	
+    /**
+     * @ORM\ManyToOne (targetEntity="App\Entity\Client")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $client;
+
+    /**
+     * @ORM\ManyToOne (targetEntity="App\Entity\Session_formation")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $session_formation;
+
     /**
      * @ORM\Column(type="date")
      */
     private $date_inscription;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $etat;
+
 
     public function getId(): ?int
     {
@@ -71,6 +78,18 @@ class Inscription
     public function setSessionFormation(?Session_formation $session_formation): self
     {
         $this->session_formation = $session_formation;
+
+        return $this;
+    }
+
+    public function getEtat(): ?string
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(string $etat): self
+    {
+        $this->etat = $etat;
 
         return $this;
     }

@@ -2,6 +2,7 @@
 namespace App\Entity;
 
 use App\Repository\Session_formationRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -105,5 +106,10 @@ class Session_formation
         $this->formation = $formation;
 
         return $this;
+    }
+
+    public function isClose(): ?bool
+    {
+        return $this->close;
     }
 }
