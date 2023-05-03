@@ -541,4 +541,25 @@ class AdminController extends AbstractController
 		// Si formulaire pas encore soumis ou pas valide (affichage du formulaire)
 		return $this->render('Admin/formPlan.html.twig', array('form' => $form->createView(), 'action' => 'suppression'));
 	}
+
+	/**
+	 * @Route("/admin/session/prévue", name="adminSessionPrévue")
+	 */
+	// Liste des sessions prévues
+	public function listeSessionsPrévues(Request $request, PaginatorInterface $paginator, ManagerRegistry $doctrine)
+	{
+		//$manager = $this->getDoctrine()->getManager();
+		//$rep = $manager->getRepository(Plan_formation::class);
+		$this->doctrine = $doctrine;
+		$rep = $doctrine->getRepository(Session_formation::class);
+		$lesSessions = $rep->findAll();
+
+		$lesSessionsPagines = $paginator->paginate(
+			$lesSessions, // Requête contenant les données à paginer (ici nos plans de formation)
+			$request->query->getInt('page', 1), // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
+			4 // Nombre de résultats par page
+		);
+
+		return $this->render('Admin/sessionPrevue.html.twig', array('lesSessions' => $lesSessionsPagines));
+	}
 }
