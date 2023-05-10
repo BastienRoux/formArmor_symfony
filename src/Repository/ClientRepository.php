@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Repository;
 
 use App\Entity\Client;
+use App\Entity\Inscription;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,7 +19,7 @@ class ClientRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Client::class);
     }
-	
+
     // /**
     //  * @return Client[] Returns an array of Client objects
     //  */
@@ -46,35 +48,35 @@ class ClientRepository extends ServiceEntityRepository
         ;
     }
     */
-	
-	public function verifMDP($nom, $mdp) // Controle du nom et du mot de passe
-	{
-		echo $nom;
-		echo $mdp;
-		$qb = $this->createQueryBuilder('c');
-		$qb->select('COUNT(c)');
-		$qb->andWhere('c.nom = :nom AND c.password = :mdp')->setParameter('nom', $nom)->setParameter('mdp', $mdp);
-		return $qb->getQuery()->getSingleScalarResult();
-	}
-	public function listeClients() // Liste tous les clients avec pagination
-	{
-		$queryBuilder = $this->createQueryBuilder('c');
 
-		// On n'ajoute pas de critère ou tri particulier ici car on veut tous les statuts, la construction
-		// de notre requête est donc finie
+    public function verifMDP($nom, $mdp) // Controle du nom et du mot de passe
+    {
+        echo $nom;
+        echo $mdp;
+        $qb = $this->createQueryBuilder('c');
+        $qb->select('COUNT(c)');
+        $qb->andWhere('c.nom = :nom AND c.password = :mdp')->setParameter('nom', $nom)->setParameter('mdp', $mdp);
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+    public function listeClients() // Liste tous les clients avec pagination
+    {
+        $queryBuilder = $this->createQueryBuilder('c');
 
-		// On récupère la Query à partir du QueryBuilder
-		$query = $queryBuilder->getQuery();
+        // On n'ajoute pas de critère ou tri particulier ici car on veut tous les statuts, la construction
+        // de notre requête est donc finie
 
-		return $query->getResult();
-	}
-	public function suppClient($id) // Suppression du client d'identifiant $id
-	{
-		$qb = $this->createQueryBuilder('c');
-		$query = $qb->delete('App\Entity\Client', 'c')
-		  ->where('c.id = :id')
-		  ->setParameter('id', $id);
-		
-		return $qb->getQuery()->getResult();
-	}
+        // On récupère la Query à partir du QueryBuilder
+        $query = $queryBuilder->getQuery();
+
+        return $query->getResult();
+    }
+    public function suppClient($id) // Suppression du client d'identifiant $id
+    {
+        $qb = $this->createQueryBuilder('c');
+        $query = $qb->delete('App\Entity\Client', 'c')
+            ->where('c.id = :id')
+            ->setParameter('id', $id);
+
+        return $qb->getQuery()->getResult();
+    }
 }

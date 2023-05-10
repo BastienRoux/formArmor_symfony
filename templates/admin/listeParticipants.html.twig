@@ -1,0 +1,38 @@
+{% extends 'admin_layout.html.twig' %}
+{% block FormArmor_body %}
+	<h2>AFFICHAGE DES INSCRITS A LA SESSION</h2>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Nom</th>
+				<th>Adresse</th>
+				<th>CP</th>
+				<th>Ville</th>
+				<th>Email</th>
+                <th>Tel</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for participant in lesParticipants %}
+				<tr {# si le nombre de passages dans la boucle est pair #} {% if loop.index is even %} class="success" {% else %} class="info" {% endif %}>
+					<td>{{participant.client.id}}</td>
+					<td>{{participant.client.nom}}</td>
+					<td>{{participant.client.adresse}}</td>
+					<td>{{participant.client.cp}}</td>
+					<td>{{participant.client.ville}}</td>
+                    <td>{{participant.client.email}}</td>
+                    <td>{{participant.client.tel}}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</tbody>
+</table>
+
+{{ knp_pagination_render(lesParticipants) }}
+
+<script>
+	$(function () {
+$('#menu7').attr('class', 'active');
+});
+</script>{% endblock %}

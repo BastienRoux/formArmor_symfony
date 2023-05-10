@@ -47,27 +47,39 @@ class Session_formationRepository extends ServiceEntityRepository
         ;
     }
     */
-	
-	public function listeSessions() // Liste toutes les sessions avec pagination
-	{
-		$queryBuilder = $this->createQueryBuilder('s');
 
-		// On n'ajoute pas de critère ou tri particulier ici car on veut toutes les sessions, la construction
-		// de notre requête est donc finie
+    public function listeSessions() // Liste toutes les sessions avec pagination
+    {
+        $queryBuilder = $this->createQueryBuilder('s');
 
-		// On récupère la Query à partir du QueryBuilder
-		$query = $queryBuilder->getQuery();
+        // On n'ajoute pas de critère ou tri particulier ici car on veut toutes les sessions, la construction
+        // de notre requête est donc finie
 
-		// On gère ensuite la pagination grace au service KNPaginator
-		return $query->getResult();
-	}
-	public function suppSession($id) // Suppression de la session d'identifiant $id
-	{
-		$qb = $this->createQueryBuilder('s');
-		$query = $qb->delete('App\Entity\Session_formation', 's')
-		  ->where('s.id = :id')
-		  ->setParameter('id', $id);
-		
-		return $qb->getQuery()->getResult();
-	}
+        // On récupère la Query à partir du QueryBuilder
+        $query = $queryBuilder->getQuery();
+
+        // On gère ensuite la pagination grace au service KNPaginator
+        return $query->getResult();
+    }
+    public function suppSession($id) // Suppression de la session d'identifiant $id
+    {
+        $qb = $this->createQueryBuilder('s');
+        $query = $qb->delete('App\Entity\Session_formation', 's')
+            ->where('s.id = :id')
+            ->setParameter('id', $id);
+
+        return $qb->getQuery()->getResult();
+    }
+    public function listeSessionsPrevues()
+    { // Liste les sessions prevues
+        $dateDebut = new \DateTime();
+        $dateFin = clone $dateDebut;
+        $dateFin->modify('+7 days');
+        $qb = $this->createQueryBuilder('s');
+        $qb->where('s.dateDebut BETWEEN :dateDebut AND :dateFin')
+            ->setParameter('dateDebut', $dateDebut)
+            ->setParameter('dateFin', $dateFin);
+
+        return $qb->getQuery()->getResult();
+    }
 }

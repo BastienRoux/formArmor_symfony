@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Client;
 use App\Entity\Inscription;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -47,4 +48,11 @@ class InscriptionRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function listeParticipants($id)
+    {
+        $qb = $this->createQueryBuilder('i')
+            ->where('i.session_formation = :sessionFormationId')
+            ->setParameter('sessionFormationId', $id);
+        return $qb->getQuery()->getResult();
+    }
 }

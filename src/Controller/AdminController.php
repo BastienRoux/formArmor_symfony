@@ -15,6 +15,7 @@ use App\Entity\Statut;
 use App\Entity\Formation;
 use App\Entity\Session_formation;
 use App\Entity\Plan_formation;
+use App\Entity\Inscription;
 
 use App\Form\ClientType;
 use App\Form\ClientCompletType;
@@ -552,7 +553,7 @@ class AdminController extends AbstractController
 		//$rep = $manager->getRepository(Plan_formation::class);
 		$this->doctrine = $doctrine;
 		$rep = $doctrine->getRepository(Session_formation::class);
-		$lesSessions = $rep->findAll();
+		$lesSessions = $rep->listeSessionsPrevues();
 
 		$lesSessionsPagines = $paginator->paginate(
 			$lesSessions, // Requête contenant les données à paginer (ici nos plans de formation)
@@ -561,5 +562,26 @@ class AdminController extends AbstractController
 		);
 
 		return $this->render('Admin/sessionPrevue.html.twig', array('lesSessions' => $lesSessionsPagines));
+	}
+
+	/**
+	 * @Route("/admin/session/validation/{id}", name="adminSessionValidation")
+	 */
+	// Liste des sessions prévues
+	public function listeParticipants($id, Request $request, PaginatorInterface $paginator, ManagerRegistry $doctrine)
+	{
+		//$manager = $this->getDoctrine()->getManager();
+		//$rep = $manager->getRepository(Plan_formation::class);
+		$this->doctrine = $doctrine;
+		$rep = $doctrine->getRepository(Inscription::class);
+		$lesParticipants = $rep->listeParticipants($id);
+
+		$lesParticipantsPagines = $paginator->paginate(
+			$lesParticipants, // Requête contenant les données à paginer (ici nos plans de formation)
+			$request->query->getInt('page', 1), // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
+			4 // Nombre de résultats par page
+		);
+
+		return $this->render('Admin/listeParticipants.html.twig', array('lesParticipants' => $lesParticipantsPagines));
 	}
 }

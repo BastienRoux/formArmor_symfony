@@ -14,25 +14,22 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% set date = "now"|date("Y-m-d") %}
 			{% for session in lesSessions %}
-				{% if (session.dateDebut == date) %}
-					<tr {# si le nombre de passages dans la boucle est pair #} {% if loop.index is even %} class="success" {% else %} class="info" {% endif %}>
-						<td>{{session.id}}</td>
-						<td>{{session.formation.libelle}}-{{session.formation.niveau}}</td>
-						<td>{{session.dateDebut|date('Y-m-d')}}</td>
-						<td>{{session.nbPlaces}}</td>
-						<td>{{session.nbInscrits}}</td>
-						{% if (session.close == 1) %}
-							<td>Oui</td>
-						{% else %}
-							<td>Non</td>
-						{% endif %}
-						<td>
-							<a href="{{ path('adminSessionModif', {'id': session.id}) }}">Validation</a>
-						</td>
-					</tr>
-				{% endif %}
+				<tr {# si le nombre de passages dans la boucle est pair #} {% if loop.index is even %} class="success" {% else %} class="info" {% endif %}>
+					<td>{{session.id}}</td>
+					<td>{{session.formation.libelle}}-{{session.formation.niveau}}</td>
+					<td>{{session.dateDebut|date('Y-m-d')}}</td>
+					<td>{{session.nbPlaces}}</td>
+					<td>{{session.nbInscrits}}</td>
+					{% if (session.close == 1) %}
+						<td>Oui</td>
+					{% else %}
+						<td>Non</td>
+					{% endif %}
+					<td>
+						<a href="{{ path('adminSessionValidation', {'id': session.id}) }}">Validation</a>
+					</td>
+				</tr>
 			{% endfor %}
 		</tbody>
 	</tbody>
