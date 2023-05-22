@@ -31,7 +31,7 @@ use App\Repository\Session_formationRepository;
 use App\Repository\Plan_formationRepository;
 
 use Doctrine\Persistence\ManagerRegistry;
-
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AdminController extends AbstractController
@@ -567,7 +567,7 @@ class AdminController extends AbstractController
 	/**
 	 * @Route("/admin/session/validation/{id}", name="adminSessionValidation")
 	 */
-	// Liste des sessions prévues
+	// Liste des participants à la session
 	public function listeParticipants($id, Request $request, PaginatorInterface $paginator, ManagerRegistry $doctrine)
 	{
 		//$manager = $this->getDoctrine()->getManager();
@@ -583,5 +583,30 @@ class AdminController extends AbstractController
 		);
 
 		return $this->render('Admin/listeParticipants.html.twig', array('lesParticipants' => $lesParticipantsPagines));
+	}
+
+	/**
+	 * @Route("/admin/session/valider/{id}", name="adminSessionValider")
+	 */
+	// Liste des participants à la session
+	public function validationSession($id, Request $request, PaginatorInterface $paginator, ManagerRegistry $doctrine)
+	{
+		//$manager = $this->getDoctrine()->getManager();
+		//$rep = $manager->getRepository(Plan_formation::class);
+		$this->doctrine = $doctrine;
+		$rep = $doctrine->getRepository(Session_formation::class);
+		$lesParticipants = $rep->validerSession($id);
+
+		$this->doctrine = $doctrine;
+		$rep = $doctrine->getRepository(Session_formation::class);
+		$lesSessions = $rep->listeSessionsPrevues();
+
+		$lesSessionsPagines = $paginator->paginate(
+			$lesSessions, // Requête contenant les données à paginer (ici nos plans de formation)
+			$request->query->getInt('page', 1), // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
+			4 // Nombre de résultats par page
+		);
+
+		return $this->render('Admin/sessionPrevue.html.twig', array('lesSessions' => $lesSessionsPagines));
 	}
 }

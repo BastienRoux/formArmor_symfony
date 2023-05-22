@@ -10,7 +10,8 @@
 				<th>CP</th>
 				<th>Ville</th>
 				<th>Email</th>
-                <th>Tel</th>
+				<th>Tel</th>
+				<th>Statut</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -21,9 +22,11 @@
 					<td>{{participant.client.adresse}}</td>
 					<td>{{participant.client.cp}}</td>
 					<td>{{participant.client.ville}}</td>
-                    <td>{{participant.client.email}}</td>
-                    <td>{{participant.client.tel}}</td>
+					<td>{{participant.client.email}}</td>
+					<td>{{participant.client.tel}}</td>
+					<td>{{participant.client.statut.type}}</td>
 				</tr>
+				<a href="{{ path('adminSessionValider', {'id': participant.sessionformation.id}) }}">Validation</a>
 			{% endfor %}
 		</tbody>
 	</tbody>

@@ -76,10 +76,21 @@ class Session_formationRepository extends ServiceEntityRepository
         $dateFin = clone $dateDebut;
         $dateFin->modify('+7 days');
         $qb = $this->createQueryBuilder('s');
-        $qb->where('s.dateDebut BETWEEN :dateDebut AND :dateFin')
+        $qb->where('s.dateDebut BETWEEN :dateDebut AND :dateFin AND s.close = 0')
             ->setParameter('dateDebut', $dateDebut)
             ->setParameter('dateFin', $dateFin);
+        $qb->orWhere('s.nbPlaces = s.nbInscrits and s.close = 0');
 
+        return $qb->getQuery()->getResult();
+    }
+
+    public function validerSession($id)
+    {
+        $qb = $this->createQueryBuilder('s');
+        $query = $qb->update('App\Entity\Session_formation', 's')
+            ->set('s.close', 1)
+            ->where('s.id = :id')
+            ->setParameter(':id', $id);
         return $qb->getQuery()->getResult();
     }
 }
