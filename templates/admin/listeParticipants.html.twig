@@ -26,11 +26,12 @@
 					<td>{{participant.client.tel}}</td>
 					<td>{{participant.client.statut.type}}</td>
 				</tr>
-				<a href="{{ path('adminSessionValider', {'id': participant.sessionformation.id}) }}">Validation</a>
 			{% endfor %}
 		</tbody>
 	</tbody>
 </table>
+<a href="{{ path('adminSessionValider', {'id': id_session}) }}">Valider</a>
+<a href="{{ path('adminSessionSupprimer', {'id': id_session}) }}">Supprimer</a>
 
 {{ knp_pagination_render(lesParticipants) }}
 

@@ -54,4 +54,12 @@ class InscriptionRepository extends ServiceEntityRepository
             ->setParameter('sessionFormationId', $id);
         return $qb->getQuery()->getResult();
     }
+
+    public function suppressionInscription($id){
+        $qb = $this->createQueryBuilder('i');
+        $query = $qb->delete('App\Entity\Inscription', 'i')
+            ->where('i.session_formation = :id')
+            ->setParameter(':id', $id);
+        return $qb->getQuery()->getResult();
+    }
 }

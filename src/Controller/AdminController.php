@@ -582,7 +582,7 @@ class AdminController extends AbstractController
 			4 // Nombre de résultats par page
 		);
 
-		return $this->render('Admin/listeParticipants.html.twig', array('lesParticipants' => $lesParticipantsPagines));
+		return $this->render('Admin/listeParticipants.html.twig', array('lesParticipants' => $lesParticipantsPagines, 'id_session' => $id));
 	}
 
 	/**
@@ -596,6 +596,35 @@ class AdminController extends AbstractController
 		$this->doctrine = $doctrine;
 		$rep = $doctrine->getRepository(Session_formation::class);
 		$lesParticipants = $rep->validerSession($id);
+
+		$this->doctrine = $doctrine;
+		$rep = $doctrine->getRepository(Session_formation::class);
+		$lesSessions = $rep->listeSessionsPrevues();
+
+		$lesSessionsPagines = $paginator->paginate(
+			$lesSessions, // Requête contenant les données à paginer (ici nos plans de formation)
+			$request->query->getInt('page', 1), // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
+			4 // Nombre de résultats par page
+		);
+
+		return $this->render('Admin/sessionPrevue.html.twig', array('lesSessions' => $lesSessionsPagines));
+	}
+
+	/**
+	 * @Route("/admin/session/supprimer/{id}", name="adminSessionSupprimer")
+	 */
+	// Liste des participants à la session
+	public function suppressionSession($id, Request $request, PaginatorInterface $paginator, ManagerRegistry $doctrine)
+	{
+		//$manager = $this->getDoctrine()->getManager();
+		//$rep = $manager->getRepository(Plan_formation::class);
+		$this->doctrine = $doctrine;
+		$rep = $doctrine->getRepository(Inscription::class);
+		$inscritsSupp = $rep->suppressionInscription($id);
+
+		$this->doctrine = $doctrine;
+		$rep = $doctrine->getRepository(Session_formation::class);
+		$sessionsSupp = $rep->suppSession($id);
 
 		$this->doctrine = $doctrine;
 		$rep = $doctrine->getRepository(Session_formation::class);
